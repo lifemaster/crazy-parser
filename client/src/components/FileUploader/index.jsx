@@ -103,8 +103,8 @@ class FileUploader extends React.Component {
             <label>
               <input type="file" name="files" onChange={this.onFileInputChange} />
               <div className="select-file-btn" type="button">Select file</div>
-              <div className="file-info">{this.state.filePath || 'File is not selected'}</div>
             </label>
+            <div className="file-info">{this.state.filePath || 'File is not selected'}</div>
           </div>
 
           <SelectField
@@ -117,7 +117,7 @@ class FileUploader extends React.Component {
           </SelectField>
 
           <div className="button-container">
-            <button type="submit" disabled={!this.props.parserValue || !this.state.filePath}>Send</button>
+            <button type="submit" disabled={!this.props.parserValue || !this.state.filePath}>Parse</button>
             <button type="button" onClick={this.resetForm}>Clear</button>
           </div>
 

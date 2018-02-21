@@ -1,5 +1,5 @@
 .uploader-container {
-  max-width: 800px;
+  max-width: 450px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -17,9 +17,12 @@ form {
   font-size: 18px;
 }
 
-label {
+.input-file-container {
   display: flex;
   align-items: center;
+}
+
+label {
   cursor: pointer;
 }
 
