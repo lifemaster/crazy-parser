@@ -1,15 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { SelectField, MenuItem, Card } from 'material-ui';
 
-import {SelectField, MenuItem, Card} from 'material-ui';
+import { setParser, setParsedData } from '../../actions';
 
 import './index.css';
 
 class FileUploader extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.state = {};
+    this.state = {
+      filePath: null,
+      isParseError: false
+    };
   }
 
   onFileInputChange = e => {
@@ -18,16 +24,15 @@ class FileUploader extends React.Component {
   }
 
   handleChangeParser = (e, index, value) => {
-    this.setState({ parserValue: value });
+    this.props.changeParserValue(value);
   }
 
   resetForm = e => {
     this.refs.form.elements.files.value = '';
 
-    this.setState({
-      parserValue: null,
-      filePath: null
-    });
+    this.setState({ filePath: null, isParseError: false });
+
+    this.props.changeParserValue('');
   }
 
   formSubmit = e => {
@@ -38,20 +43,27 @@ class FileUploader extends React.Component {
     const form = self.refs.form;
     const formData = new FormData(form);
 
-    formData.append('parser', self.state.parserValue);
+    formData.append('parser', self.props.parserValue);
 
     self.sendData(formData)
       .then(res => {
-        console.log('------------------------------------------------');
-        console.log(`Content-Type: ${res.contentType}`);
-        console.log(`Content-Length: ${res.contentLength} bytes`);
+        self.setState({ isParseError: false });
 
         if (res.contentType.indexOf('application/json') !== -1) {
           console.log('Data: ', JSON.parse(res.data));
+          self.props.changeParsedData(JSON.parse(res.data));
+        } else {
+          self.setState({ isParseError: true });
+          self.props.changeParsedData({});
+          console.log(res.data);
         }
         self.resetForm();
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        self.setState({ isParseError: true });
+        self.props.changeParsedData({});
+        console.log(err);
+      });
   }
 
   sendData(formData) {
@@ -84,6 +96,9 @@ class FileUploader extends React.Component {
     return (
       <Card className="uploader-container">
         <form ref="form" onSubmit={this.formSubmit}>
+
+          { this.state.isParseError ? <p className="alert-message">Data parse error</p> : '' }
+
           <div className="input-file-container">
             <label>
               <input type="file" name="files" onChange={this.onFileInputChange} />
@@ -91,22 +106,46 @@ class FileUploader extends React.Component {
               <div className="file-info">{this.state.filePath || 'File is not selected'}</div>
             </label>
           </div>
+
           <SelectField
             floatingLabelText="Select parser"
-            value={this.state.parserValue}
+            value={this.props.parserValue}
             onChange={this.handleChangeParser}
           >
             <MenuItem value={'debetCreditParser'} primaryText="Debet/Credit parser" />
             <MenuItem value={'otherParser'} primaryText="Other parser" />
           </SelectField>
+
           <div className="button-container">
-            <button type="submit" disabled={!this.state.parserValue || !this.state.filePath}>Send</button>
+            <button type="submit" disabled={!this.props.parserValue || !this.state.filePath}>Send</button>
             <button type="button" onClick={this.resetForm}>Clear</button>
           </div>
+
         </form>
       </ Card>
     );
   }
 }
 
-export default FileUploader;
+FileUploader.propTypes = {
+  parserValue: PropTypes.string.isRequired,
+  changeParserValue: PropTypes.func.isRequired,
+  changeParsedData: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state) {
+  return {
+    parserValue: state.selectedParser
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeParserValue: parserValue => dispatch(setParser(parserValue)),
+    changeParsedData: parsedData => dispatch(setParsedData(parsedData))
+  }
+}
+
+const FileUploaderContainer = connect(mapStateToProps, mapDispatchToProps)(FileUploader);
+
+export default FileUploaderContainer;
