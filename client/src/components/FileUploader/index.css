@@ -1,0 +1,84 @@
+.uploader-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+input[type=file] {
+  display: none;
+}
+
+.file-info {
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+form button {
+  margin: 10px;
+  cursor: pointer;
+  outline: none;
+}
+
+button[type=submit],
+.select-file-btn {
+  white-space: nowrap;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 20px;
+  color: white;
+  background-image: linear-gradient(#4f93ce, #285f8f);
+  border: 1px solid #285f8f;
+}
+
+button[type=submit]:hover,
+.select-file-btn:hover {
+  background-image: linear-gradient(#63a0d4, #337ab7);
+}
+
+button[type=submit][disabled] {
+  background: rgb(229, 229, 229);
+  color: rgb(128, 128, 128);
+  border: none;
+  cursor: default;
+}
+
+.select-file-btn {
+  cursor: pointer;
+}
+
+button[type=button] {
+  white-space: nowrap;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 20px;
+  color: white;
+  background-image: linear-gradient(white, #d5d5d5);
+  border: 1px solid #d5d5d5;
+  color: black;
+}
+
+button[type=button]:hover {
+  background-image: linear-gradient(white, #eee);
+}

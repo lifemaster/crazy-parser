@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Toolbar, ToolbarTitle} from 'material-ui';
+import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui';
 
 import './index.css';
 
@@ -15,10 +15,10 @@ const toolbarTitleStyles = {
 function AppHeader() {
   return (
     <Toolbar style={topbarStyles}>
-      <ToolbarTitle
-        text="Crazy parser"
-        style={toolbarTitleStyles}
-      />
+      <ToolbarGroup>
+        <img className="logo" src="./images/radiation.png" alt="logo" width="40" height="40" />
+        <ToolbarTitle text="Crazy parser" style={toolbarTitleStyles} />
+      </ToolbarGroup>
     </Toolbar>
   );
 }
