@@ -1,0 +1,43 @@
+.container {
+  margin: 40px 0;
+  padding: 20px;
+}
+
+.tables {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-container {
+  width: calc(50% - 40px);
+  padding: 15px;
+  border: 1px solid #CCC;
+}
+
+.table-container h3 {
+  text-align: center;
+}
+
+.total {
+  margin: 30px 20px 5px;
+}
+
+@media screen and (max-width: 1380px) {
+  .container {
+    margin: 40px 0;
+    padding: 10px;
+  }
+
+  .tables {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .table-container {
+    width: auto;
+  }
+
+  .table-container:first-child {
+    margin-bottom: 20px;
+  }
+}

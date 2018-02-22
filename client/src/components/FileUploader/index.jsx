@@ -61,7 +61,7 @@ class FileUploader extends React.Component {
       })
       .catch(err => {
         self.setState({ isParseError: true });
-        self.props.changeParsedData({});
+        self.props.changeParsedData(null);
         console.log(err);
       });
   }
