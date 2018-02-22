@@ -53,18 +53,15 @@ function getData(dataArr) {
 }
 
 function parseInfo(infoData) {
-  const infoTitleReg = /[А-Я,а-я,A-Z,a-z, \s, 0-9]+/;
-  const infoValueReg = /-?\d{1,}\.\d{1,}/;
-
   return {
     title: infoData[0].trim(),
     begin: {
-      title: infoData[2].match(infoTitleReg)[0].trim(),
-      value: infoData[2].match(infoValueReg)[0].trim()
+      title: infoData[2].split(':')[0].trim(),
+      value: infoData[2].split(':')[1].trim().split(',').join('')
     },
     end: {
-      title: infoData[3].match(infoTitleReg)[0].trim(),
-      value: infoData[3].match(infoValueReg)[0].trim()
+      title: infoData[3].split(':')[0].trim(),
+      value: infoData[3].split(':')[1].trim().split(',').join('')
     }
   }
 }
