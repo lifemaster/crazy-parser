@@ -1,0 +1,14 @@
+[
+  {
+    "id": "posting_transactions_logs",
+    "title": "Журналы операций и проводок"
+  },
+  {
+    "id": "order_logs",
+    "title": "Журналы ордеров"
+  },
+  {
+    "id": "processing",
+    "title": "Обработки"
+  }
+]

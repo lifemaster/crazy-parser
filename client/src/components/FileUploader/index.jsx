@@ -13,9 +13,19 @@ class FileUploader extends React.Component {
     super(props);
 
     this.state = {
+      parsers: [],
       filePath: null,
-      isParseError: false
+      parseErrorMessage: ''
     };
+  }
+
+  componentDidMount() {
+    const self = this;
+
+    fetch('http://localhost:1234/api/parsers')
+      .then(response => response.json())
+      .then(parsers => self.setState({ parsers }))
+      .catch(err => console.log(err));
   }
 
   onFileInputChange = e => {
@@ -30,7 +40,7 @@ class FileUploader extends React.Component {
   resetForm = e => {
     this.refs.form.elements.files.value = '';
 
-    this.setState({ filePath: null, isParseError: false });
+    this.setState({ filePath: null, parseErrorMessage: '' });
 
     this.props.changeParserValue('');
   }
@@ -43,26 +53,26 @@ class FileUploader extends React.Component {
     const form = self.refs.form;
     const formData = new FormData(form);
 
-    formData.append('parser', self.props.parserValue);
+    formData.append('parserId', self.props.parserValue);
 
     self.sendData(formData)
       .then(res => {
-        self.setState({ isParseError: false });
+        self.setState({ parseErrorMessage: '' });
 
         if (res.contentType.indexOf('application/json') !== -1) {
           console.log('Data: ', JSON.parse(res.data));
           self.props.changeParsedData(JSON.parse(res.data));
         } else {
-          self.setState({ isParseError: true });
+          self.setState({ parseErrorMessage: 'Invalide data type' });
           self.props.changeParsedData({});
           console.log(res.data);
         }
         self.resetForm();
       })
-      .catch(err => {
-        self.setState({ isParseError: true });
+      .catch(errorMessage => {
+        self.setState({ parseErrorMessage: errorMessage });
         self.props.changeParsedData(null);
-        console.log(err);
+        console.error(errorMessage);
       });
   }
 
@@ -97,7 +107,7 @@ class FileUploader extends React.Component {
       <Card className="uploader-container">
         <form ref="form" onSubmit={this.formSubmit}>
 
-          { this.state.isParseError ? <p className="alert-message">Data parse error</p> : '' }
+          { this.state.parseErrorMessage ? <p className="alert-message">{this.state.parseErrorMessage}</p> : '' }
 
           <div className="input-file-container">
             <label>
@@ -108,12 +118,14 @@ class FileUploader extends React.Component {
           </div>
 
           <SelectField
+            style={{ width: '100%' }}
             floatingLabelText="Select parser"
             value={this.props.parserValue}
             onChange={this.handleChangeParser}
           >
-            <MenuItem value={'debetCreditParser'} primaryText="Debet/Credit parser" />
-            <MenuItem value={'otherParser'} primaryText="Other parser" />
+            {this.state.parsers.map((parser, i) => {
+              return <MenuItem key={i} value={parser.id} primaryText={parser.title} />
+            })}
           </SelectField>
 
           <div className="button-container">
