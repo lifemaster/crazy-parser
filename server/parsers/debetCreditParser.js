@@ -114,7 +114,7 @@ function parseRowData(rowData) {
   if (isPrimaryRow) {
     const account = accountReg.exec(rowData)[0].trim();
     const contragent = rowData.replace(accountReg, '').replace(amountReg, '').trim().slice(0, -1).trim();
-    const amount = amountReg.exec(rowData)[0].split(',').join('');
+    const amount = parseFloat(amountReg.exec(rowData)[0].split(',').join(''));
 
     return { isPrimaryRow: true, account, contragent, amount };
   } else if (isTotalRow) {

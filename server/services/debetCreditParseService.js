@@ -4,6 +4,8 @@ const domain = require('domain');
 
 const debetCreditParser = require('../parsers/debetCreditParser');
 
+const parserDomain = domain.create();
+
 module.exports = filePath => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, (err, data) => {
@@ -12,8 +14,10 @@ module.exports = filePath => {
       } else {
         const decodedData = iconv.decode(data, 'CP866');
         const dataArr = decodedData.toString().split('\r\n');
-        resolve(debetCreditParser(dataArr));
+        parserDomain.run(() => resolve(debetCreditParser(dataArr)));
       }
     });
+
+    parserDomain.on('error', err => reject(err));
   });
 }
